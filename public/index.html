@@ -9,16 +9,28 @@
     <title>Kalambury</title>
     <link rel="stylesheet" href="css/style.css" />
     <link rel="icon" href="assets/favicon.ico" type="image/x-icon" />
-    <script src="js/api.js"></script>
-    <script src="js/canvas.js"></script>
-    <script src="js/chat.js"></script>
-    <script src="js/game.js"></script>
-    <script src="js/main.js"></script>
-    <script src="js/socket.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/main.js" type="module"></script>
 </head>
 
 <body>
-    <h1>KALAMBURY</h1>
+    <div id="mainScreen">
+        <div id="header">
+            <h1>KALAMBURY</h1>
+        </div>
+        <div id="gameScreen">
+            <div id="joinScreen">
+                <input id="joinInput" type="text" name="playerName">
+                <button id="joinButton">Dołącz</button>
+            </div>
+            <div id="gameProgressScreen">
+                <h2>GRA W TRAKCIE</h2>
+            </div>
+        </div>
+        <div id="leaderBoardScreen">
+
+        </div>
+    </div>
 </body>
 
 </html>
