@@ -3,20 +3,24 @@
 class Game {
     constructor(socket) {
         this.socket = socket;
-        this.joinInput;
-        this.joinButton;
+        this.players = [];
     }
 
     init() {
-        this.joinInput = document.getElementById('joinInput');
-        this.joinButton = document.getElementById('joinButton');
-        this.joinButton.addEventListener("click", () => this.join());
+        document.getElementById('joinButton').addEventListener("click", () => this.join());
+        document.getElementById('startButton').addEventListener("click", () => this.start());
+
+
         this.socket.onJoinSuccess((data) => this.handleJoinSuccess(data));
+        this.socket.onPlayersUpdate((data) => this.handlePlayersUpdate(data));
+        this.socket.onGameStart((data) => this.handleGameStart(data));
+        this.socket.onStartRound((data) => this.handleStartRound(data));
+        this.socket.onTimeUpdate((data) => this.handleTimeUpdate(data));
     }
 
     join() {
         console.log("Joining...")
-        const playerName = this.joinInput.value.trim();
+        const playerName = document.getElementById('joinInput').value.trim();
         if (!playerName) {
             alert('Wpisz nazwę użytkownika');
             return;
@@ -24,13 +28,64 @@ class Game {
         this.socket.join(playerName)
     }
 
+    start() {
+        console.log("Starting...")
+        if (this.players.length < 2) {
+            alert('Poczekaj na innych graczy');
+            return;
+        }
+        this.socket.start()
+    }
+
     handleJoinSuccess(data) {
-        console.log(`Joined to game, player name: ${data.playerName}`);
+        console.log("handleJoinSuccess")
+        console.log(data)
         document.getElementById('joinScreen').style.display = 'none';
+        console.log(!data.gameStarted)
+        if (!data.gameStarted) {
+            document.getElementById('lobbyScreen').style.display = 'block';
+        } else {
+            document.getElementById('gameProgressScreen').style.display = 'block';
+        }
+    }
+
+    handlePlayersUpdate(data) {
+        console.log("handlePlayersUpdate")
+        console.log(data)
+        this.players = data.players;
+
+        if (this.players.find(e => e.isHost).id == this.socket.getId()) {
+            document.getElementById('startButton').style.display = 'block';
+        } else {
+            document.getElementById('startButton').style.display = 'none';
+        }
+
+        document.getElementById('playerCount').innerHTML = this.players.length;
+    }
+
+    handleGameStart(data) {
+        console.log("handleGameStart")
+        console.log(data)
+
+        document.getElementById('lobbyScreen').style.display = 'none';
         document.getElementById('gameProgressScreen').style.display = 'block';
     }
 
+    handleStartRound(data) {
+        console.log("handleStartRound")
+        console.log(data)
 
+        document.getElementById('timer').innerHTML = data.roundTime;
+        document.getElementById('roundCount').innerHTML = data.round;
+        document.getElementById('drawerName').innerHTML = data.drawerName;
+    }
+
+    handleTimeUpdate(data) {
+        console.log("handleTimeUpdate")
+        console.log(data)
+
+        document.getElementById('timer').innerHTML = data.timeLeft;
+    }
 }
 
 export default Game;

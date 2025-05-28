@@ -14,16 +14,60 @@ class Socket {
                 this.onJoinSuccessCallback(data);
             }
         });
+        this.socket.on('playersUpdate', (data) => {
+            if (this.onPlayersUpdateCallback) {
+                this.onPlayersUpdateCallback(data);
+            }
+        });
+        this.socket.on('startGame', (data) => {
+            console.log("start")
+            if (this.onGameStartCallback) {
+                this.onGameStartCallback(data);
+            }
+        });
+        this.socket.on('startRound', (data) => {
+            if (this.onStartRoundCallback) {
+                this.onStartRoundCallback(data);
+            }
+        });
+        this.socket.on('timeUpdate', (data) => {
+            if (this.onTimeUpdateCallback) {
+                this.onTimeUpdateCallback(data);
+            }
+        });
+    }
+
+    getId() {
+        return this.socket.id;
     }
 
     join(playerName) {
-        this.socket.emit('join', playerName)
+        this.socket.emit('join', playerName);
+    }
+
+    start() {
+        this.socket.emit('startGame');
     }
 
     onJoinSuccess(callback) {
         this.onJoinSuccessCallback = callback;
     }
 
+    onPlayersUpdate(callback) {
+        this.onPlayersUpdateCallback = callback;
+    }
+
+    onGameStart(callback) {
+        this.onGameStartCallback = callback;
+    }
+
+    onStartRound(callback) {
+        this.onStartRoundCallback = callback;
+    }
+
+    onTimeUpdate(callback) {
+        this.onTimeUpdateCallback = callback;
+    }
 }
 
 export default Socket;

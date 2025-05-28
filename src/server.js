@@ -24,21 +24,49 @@ io.on('connect', (socket) => {
     console.log(users)
 
     socket.on('disconnect', () => {
-        if (users.includes(socket.id)) {
-            console.log(`Socket disconnected, user ID: ${socket.id}`);
+        console.log(`Socket disconnected, user ID: ${socket.id}`);
+        users.pop(socket.id);
+        if (gameController.players.find(e => e.id == socket.id)) {
             gameController.removePlayer(socket.id);
-            console.log(gameController);
-            users.pop(socket.id);
-        } else {
-            console.log(`Unknown socket disconnected: ${socket.id}`);
+            console.log("Player disconnected, players list:");
+            console.log(gameController.players);
+            gameController.players.forEach(player => {
+                io.to(player.id).emit('playersUpdate', { players: gameController.players });
+            });
         }
     });
 
     socket.on('join', (playerName) => {
         gameController.addPlayer(socket.id, playerName);
-        console.log(gameController);
-        socket.emit('joinSuccess', { playerName });
+        console.log("Player joined, players list:");
+        console.log(gameController.players);
+        socket.emit('joinSuccess', { playerName: playerName, gameStarted: gameController.gameStarted });
+        gameController.players.forEach(player => {
+            io.to(player.id).emit('playersUpdate', { players: gameController.players });
+        });
+    });
+
+    socket.on('startGame', () => {
+        gameController.startGame();
     })
+});
+
+gameController.on('startGame', (data) => {
+    gameController.players.forEach(player => {
+        io.to(player.id).emit('startGame', data);
+    });
+});
+
+gameController.on('startRound', (data) => {
+    gameController.players.forEach(player => {
+        io.to(player.id).emit('startRound', data);
+    });
+});
+
+gameController.on('timeUpdate', (data) => {
+    gameController.players.forEach(player => {
+        io.to(player.id).emit('timeUpdate', data);
+    });
 });
 
 const port = process.env.PORT || 3000;

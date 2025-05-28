@@ -1,5 +1,14 @@
 /* GŁÓWNY PLIK ARKUSZY STYLÓW */
 
+
+#lobbyScreen {
+    display: none;
+}
+
+#startButton {
+    display: none;
+}
+
 #gameProgressScreen {
     display: none;
 }
