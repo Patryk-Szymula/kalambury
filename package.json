@@ -1,0 +1,24 @@
+{
+  "name": "kalambury",
+  "version": "1.0.0",
+  "description": "Projekt realizowany w ramach przedmiotu Techniki Internetowe",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Patryk-Szymula/kalambury.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Patryk-Szymula/kalambury/issues"
+  },
+  "homepage": "https://github.com/Patryk-Szymula/kalambury#readme",
+  "dependencies": {
+    "express": "^5.1.0",
+    "socket.io": "^4.8.1"
+  }
+}
