@@ -1,4 +1,4 @@
-// LOGIKA GRY NA KLIENCIE
+// GAME LOGIC ON CLIENT
 
 class Game {
     constructor(socket) {
@@ -7,10 +7,11 @@ class Game {
     }
 
     init() {
+        // Register event listeners for buttons
         document.getElementById('joinButton').addEventListener("click", () => this.join());
         document.getElementById('startButton').addEventListener("click", () => this.start());
 
-
+        // Register client callbacks handlers
         this.socket.onJoinSuccess((data) => this.handleJoinSuccess(data));
         this.socket.onPlayersUpdate((data) => this.handlePlayersUpdate(data));
         this.socket.onGameStart((data) => this.handleGameStart(data));
@@ -18,6 +19,7 @@ class Game {
         this.socket.onTimeUpdate((data) => this.handleTimeUpdate(data));
     }
 
+    // Join game function - send joining player's name to the server
     join() {
         console.log("Joining...")
         const playerName = document.getElementById('joinInput').value.trim();
@@ -28,6 +30,7 @@ class Game {
         this.socket.join(playerName)
     }
 
+    // Start game function - allows start only if there is minimum 2 players
     start() {
         console.log("Starting...")
         if (this.players.length < 2) {
@@ -37,6 +40,8 @@ class Game {
         this.socket.startGame()
     }
 
+    // Callback handlers
+    // Change screen after joining the game
     handleJoinSuccess(data) {
         console.log("handleJoinSuccess")
         console.log(data)
@@ -49,6 +54,7 @@ class Game {
         }
     }
 
+    // Update player list, show start button for host
     handlePlayersUpdate(data) {
         console.log("handlePlayersUpdate")
         console.log(data)
@@ -63,6 +69,7 @@ class Game {
         document.getElementById('playerCount').innerHTML = this.players.length;
     }
 
+    // Change screen after starting the game
     handleGameStart(data) {
         console.log("handleGameStart")
         console.log(data)
@@ -71,6 +78,7 @@ class Game {
         document.getElementById('gameProgressScreen').style.display = 'block';
     }
 
+    // Update new round information
     handleStartRound(data) {
         console.log("handleStartRound")
         console.log(data)
@@ -80,6 +88,7 @@ class Game {
         document.getElementById('drawerName').innerHTML = data.drawerName;
     }
 
+    // Update remaining time of round
     handleTimeUpdate(data) {
         console.log("handleTimeUpdate")
         console.log(data)

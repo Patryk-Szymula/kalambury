@@ -14,37 +14,47 @@
 </head>
 
 <body>
+    <!-- Main container (entire app) -->
     <div id="mainScreen">
+        <!-- Header section -->
         <div id="header">
             <h1>KALAMBURY</h1>
         </div>
+        <!-- Game container - switching by menu -->
         <div id="gameScreen">
+            <!-- Joining screen - switching by script -->
             <div id="joinScreen">
                 <input id="joinInput" type="text" name="playerName">
                 <button id="joinButton">Dołącz</button>
             </div>
+            <!-- Lobby screen - switching by script -->
             <div id="lobbyScreen">
                 <h2>OCZEKIWANIE NA START</h2>
                 <h3>Liczba graczy: <span id="playerCount">0</span></h3>
                 <button id="startButton">Start</button>
             </div>
+            <!-- Game in progress screen - switching by script -->
             <div id="gameProgressScreen">
                 <h2>GRA W TRAKCIE</h2>
                 <h3>Pozostały czas: <span id="timer">0</span></h3>
                 <h3>Runda: <span id="roundCount">0</span></h3>
                 <h3>Rysujący: <span id="drawerName">###</span></h3>
+                <!-- Chat container -->
                 <div id="chatBox">
+                    <!-- Messages -->
                     <div id="messagesBox">
                         <div id="message">
                             <span id="messageAuthor">XYZ</span>
                             <span id="messageText">Treść wiadomości</span>
                         </div>
                     </div>
+                    <!-- Chat controls -->
                     <input id="chatInput" type="text" name="chatMessage">
                     <button id="chatButton">Wyślij</button>
                 </div>
             </div>
         </div>
+        <!-- Leaderboard container - switching by menu -->
         <div id="leaderBoardScreen">
 
         </div>
