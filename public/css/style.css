@@ -1,1 +1,5 @@
 /* GŁÓWNY PLIK ARKUSZY STYLÓW */
+
+#gameProgressScreen {
+    display: none;
+}
