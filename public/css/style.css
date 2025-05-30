@@ -82,3 +82,58 @@
 #chatButton:hover {
     background-color: #1565c0;
 }
+
+#drawingSection {
+  margin-top: 20px;
+  border: 2px solid #444;
+  width: 620px; /* trochę większe niż canvas, żeby była ramka */
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  user-select: none; /* wyłącza zaznaczanie tekstu */
+}
+
+#drawingCanvas {
+  display: block;
+  background-color: white;
+  border: 1px solid #ccc;
+  cursor: crosshair;
+  width: 600px;  /* szerokość zgodna z HTML */
+  height: 400px; /* wysokość zgodna z HTML */
+  touch-action: none; /* poprawa obsługi dotyku */
+  border-radius: 4px;
+}
+
+#colorPicker {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+}
+
+#colorPicker .color {
+  width: 32px;
+  height: 32px;
+  border: 2px solid #ccc;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+}
+
+#colorPicker .color:hover {
+  border-color: #666;
+}
+
+#colorPicker .color[data-color="white"] {
+  position: relative;
+  font-size: 12px;
+  color: #444;
+  font-weight: bold;
+  line-height: 32px;
+  text-align: center;
+  user-select: none;
+}
+
+#colorPicker .color.selected {
+  border-color: #000;
+  box-shadow: 0 0 5px #000;
+}

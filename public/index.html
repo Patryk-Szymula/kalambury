@@ -6,6 +6,7 @@
   <link rel="stylesheet" href="css/style.css">
   <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
   <script src="/socket.io/socket.io.js"></script>
+  <script src="js/canvas.js"></script>
   <script src="js/main.js" type="module"></script>
 </head>
 
@@ -43,14 +44,22 @@
                     <!-- Chat controls -->
                     <input id="chatInput" type="text" name="chatMessage">
                     <button id="chatButton">Wyślij</button>
+                <!-- Canvas drawing section -->
+                <div id="drawingSection">
+                <canvas id="drawingCanvas" width="600" height="400"></canvas>
+                    <div id="colorPicker">
+                        <button class="color" data-color="black" style="background:black;"></button>
+                        <button class="color" data-color="red" style="background:red;"></button>
+                        <button class="color" data-color="blue" style="background:blue;"></button>
+                        <button class="color" data-color="green" style="background:green;"></button>
+                        <button class="color" data-color="white" style="background:white;"></button>
+                    </div>
                 </div>
             </div>
         </div>
-        <!-- Leaderboard container - switching by menu -->
-        <div id="leaderBoardScreen">
-
-        </div>
     </div>
+    <!-- Leaderboard container - switching by menu -->
+    <div id="leaderBoardScreen"></div>
 </body>
 
 </html>
