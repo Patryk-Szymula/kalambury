@@ -1,16 +1,12 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html version="-//W3C//DTD XHTML 1.1//EN" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3.org/1999/xhtml
-                        http://www.w3.org/MarkUp/SCHEMA/xhtml11.xsd">
-
+<!DOCTYPE html>
+<html lang="pl">
 <head>
-    <meta http-equiv="Content-Type" content="application/xhtml+xml" />
-    <title>Kalambury</title>
-    <link rel="stylesheet" href="css/style.css" />
-    <link rel="icon" href="assets/favicon.ico" type="image/x-icon" />
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="js/main.js" type="module"></script>
+  <meta charset="UTF-8">
+  <title>Kalambury</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="js/main.js" type="module"></script>
 </head>
 
 <body>
@@ -42,12 +38,8 @@
                 <!-- Chat container -->
                 <div id="chatBox">
                     <!-- Messages -->
-                    <div id="messagesBox">
-                        <div id="message">
-                            <span id="messageAuthor">XYZ</span>
-                            <span id="messageText">Treść wiadomości</span>
-                        </div>
-                    </div>
+                    <div id="messagesBox"></div>
+                </div>
                     <!-- Chat controls -->
                     <input id="chatInput" type="text" name="chatMessage">
                     <button id="chatButton">Wyślij</button>
