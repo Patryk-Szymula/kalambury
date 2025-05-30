@@ -1,9 +1,12 @@
 // GAME LOGIC ON CLIENT
 
+import Drawing from './canvas.js';
+
 class Game {
     constructor(socket) {
         this.socket = socket;
         this.players = [];
+        this.drawing = null;
     }
 
     init() {
@@ -86,6 +89,23 @@ class Game {
         document.getElementById('timer').innerHTML = data.roundTime;
         document.getElementById('roundCount').innerHTML = data.round;
         document.getElementById('drawerName').innerHTML = data.drawerName;
+
+        const myName = this.socket.getPlayerName();
+        const isDrawer = (myName === data.drawerName);
+
+        const drawingSection = document.getElementById('drawingSection');
+        drawingSection.style.display = isDrawer ? 'block' : 'none';
+
+        if (isDrawer) {
+            if (!this.drawing) {
+                this.drawing = new Drawing('drawingCanvas', 'colorPicker');
+            }
+        } else {
+            if (this.drawing) {
+                this.drawing.clear();
+                this.drawing = null;
+            }
+        }
     }
 
     // Update remaining time of round

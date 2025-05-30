@@ -3,6 +3,7 @@
 class Socket {
     constructor() {
         this.socket = io();
+        this.playerName = null;
 
         // Server listeners
 
@@ -50,9 +51,14 @@ class Socket {
         return this.socket.id;
     }
 
+    getPlayerName() {
+        return this.playerName;
+    }
+
     // Client emitters
 
     join(playerName) {
+        this.playerName = playerName;
         this.socket.emit('join', playerName);
     }
 
