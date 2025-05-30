@@ -1,8 +1,11 @@
-// KOMUNIKACJA Z SERWEREM I GRACZAMI W CZASIE RZECZYWISTYM
+// COMMUNICATION WITH THE SERVER AND PLAYERS IN REAL TIME
 
 class Socket {
     constructor() {
         this.socket = io();
+
+        // Server listeners
+
         this.socket.on('connect', () => {
             console.log(`Logged, your ID: ${this.socket.id}`)
         });
@@ -42,9 +45,12 @@ class Socket {
         });
     }
 
+    // Returning client ID method
     getId() {
         return this.socket.id;
     }
+
+    // Client emitters
 
     join(playerName) {
         this.socket.emit('join', playerName);
@@ -57,6 +63,8 @@ class Socket {
     sendMessage(message) {
         this.socket.emit('sendMessage', message)
     }
+
+    // Client callbacks
 
     onJoinSuccess(callback) {
         this.onJoinSuccessCallback = callback;

@@ -1,4 +1,4 @@
-// GŁÓWNY PLIK SERWERA
+// MAIN SERVER FILE
 
 const path = require("path");
 const http = require("http");
@@ -13,47 +13,58 @@ const io = socketio(server);
 const publicDirectoryPath = path.join(__dirname, "../public");
 app.use(express.static(publicDirectoryPath));
 
-// definicja zmiennych
+// Define variables
 let gameController = new GameController();
-let users = [];
+let users = []; // List for all users connected to app
 
+// Handle client connection
 io.on('connect', (socket) => {
     console.log(`Socket connected, user ID: ${socket.id}`);
     users.push(socket.id)
     console.log("Active users:")
     console.log(users)
 
+    // Handle client disconnection
     socket.on('disconnect', () => {
         console.log(`Socket disconnected, user ID: ${socket.id}`);
         users.pop(socket.id);
+        // Remove player from the game
         if (gameController.players.find(e => e.id == socket.id)) {
             gameController.removePlayer(socket.id);
             console.log("Player disconnected, players list:");
             console.log(gameController.players);
+            // Update all players with the new players list
             gameController.players.forEach(player => {
                 io.to(player.id).emit('playersUpdate', { players: gameController.players });
             });
         }
     });
 
+    // Handle player joining the game
     socket.on('join', (playerName) => {
         gameController.addPlayer(socket.id, playerName);
         console.log("Player joined, players list:");
         console.log(gameController.players);
+        // Notify the player of joining succesful
         socket.emit('joinSuccess', { playerName: playerName, gameStarted: gameController.gameStarted });
+        // Update all players with the new players list
         gameController.players.forEach(player => {
             io.to(player.id).emit('playersUpdate', { players: gameController.players });
         });
     });
 
+    // Handle game start request from a client
     socket.on('startGame', () => {
         gameController.startGame();
     })
 
+    // Handle chat message sent by a player
     socket.on('sendMessage', (message) => {
         gameController.handleMessage(socket.id, message);
     })
 });
+
+// Game controller callbacks handlers
 
 gameController.on('startGame', (data) => {
     gameController.players.forEach(player => {
@@ -83,6 +94,7 @@ gameController.on('drawerMessageWarning', (data) => {
     io.to(data.playerId).emit('chatMessage', data);
 });
 
+// Set running server port
 const port = process.env.PORT || 3000;
 server.listen(port, () => {
     console.log(`Start serwera na porcie: ${port}`);

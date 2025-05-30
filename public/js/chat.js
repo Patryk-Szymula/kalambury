@@ -1,4 +1,4 @@
-// WIADOMOŚCI GRACZY
+// CHAT SYSTEM
 
 class Chat {
     constructor(socket) {
@@ -6,11 +6,14 @@ class Chat {
     }
 
     init() {
+        // Register event listeners for buttons
         document.getElementById('chatButton').addEventListener("click", () => this.sendMessage());
 
+        // Register client callbacks handlers
         this.socket.onChatMessage((data) => this.handleChatMessage(data));
     }
 
+    // Send message function
     sendMessage() {
         console.log("Sending message...");
         const message = document.getElementById('chatInput').value.trim();
@@ -19,6 +22,8 @@ class Chat {
         }
     }
 
+    // Handlers
+    // Display message from the player
     handleChatMessage(data) {
         console.log("handleChatMessage")
         console.log(data)
