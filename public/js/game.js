@@ -34,7 +34,7 @@ class Game {
             alert('Poczekaj na innych graczy');
             return;
         }
-        this.socket.start()
+        this.socket.startGame()
     }
 
     handleJoinSuccess(data) {

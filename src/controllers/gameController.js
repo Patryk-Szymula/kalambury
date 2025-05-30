@@ -8,8 +8,9 @@ class GameController {
         this.drawerIndex = 0;
         this.roundIndex = 1;
         this.maxRound = 10;
-        this.roundTime = 5;
+        this.roundTime = 20;
         this.roundTimer = null;
+        this.currentAnswer = "hasło";
     };
 
     on(event, callback) {
@@ -64,8 +65,10 @@ class GameController {
 
     startRound() {
         this.emit('startRound', { round: this.roundIndex, drawerName: this.players[this.drawerIndex].name, roundTime: this.roundTime });
+        console.log(this.players)
         console.log(`Round: ${this.roundIndex}`)
         console.log(`Drawer: ${this.players[this.drawerIndex].name}`)
+        console.log(`Answer: ${this.currentAnswer}`)
 
         let timeLeft = this.roundTime;
         this.roundTimer = setInterval(() => {
@@ -86,6 +89,22 @@ class GameController {
         if (this.roundIndex <= this.maxRound) {
             this.drawerIndex = (this.drawerIndex + 1) % this.players.length;
             this.startRound();
+        }
+    }
+
+    handleMessage(playerId, message) {
+        console.log(`[message] ${playerId}: ${message}`);
+
+        if (playerId == this.players[this.drawerIndex].id && message.toLowerCase() == this.currentAnswer.toLowerCase()) {
+            message = "Nie wysyłaj hasła pozostałym graczom!";
+            this.emit('drawerMessageWarning', { playerId: playerId, playerName: this.players.find(e => e.id == playerId).name, message: message });
+        } else if (message.toLowerCase() == this.currentAnswer.toLowerCase()) {
+            this.emit('chatMessage', { playerId: playerId, playerName: this.players.find(e => e.id == playerId).name, message: message });
+            this.players.find(e => e.id == playerId).points += Math.min(Math.floor(this.roundTime / 5) + 1, 20);
+            this.players.find(e => e.id == this.players[this.drawerIndex].id).points += 10;
+            this.nextRound();
+        } else {
+            this.emit('chatMessage', { playerId: playerId, playerName: this.players.find(e => e.id == playerId).name, message: message });
         }
     }
 }

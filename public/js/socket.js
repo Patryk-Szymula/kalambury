@@ -35,6 +35,11 @@ class Socket {
                 this.onTimeUpdateCallback(data);
             }
         });
+        this.socket.on('chatMessage', (data) => {
+            if (this.onChatMessageCallback) {
+                this.onChatMessageCallback(data);
+            }
+        });
     }
 
     getId() {
@@ -45,8 +50,12 @@ class Socket {
         this.socket.emit('join', playerName);
     }
 
-    start() {
+    startGame() {
         this.socket.emit('startGame');
+    }
+
+    sendMessage(message) {
+        this.socket.emit('sendMessage', message)
     }
 
     onJoinSuccess(callback) {
@@ -67,6 +76,10 @@ class Socket {
 
     onTimeUpdate(callback) {
         this.onTimeUpdateCallback = callback;
+    }
+
+    onChatMessage(callback) {
+        this.onChatMessageCallback = callback;
     }
 }
 

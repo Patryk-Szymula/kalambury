@@ -49,6 +49,10 @@ io.on('connect', (socket) => {
     socket.on('startGame', () => {
         gameController.startGame();
     })
+
+    socket.on('sendMessage', (message) => {
+        gameController.handleMessage(socket.id, message);
+    })
 });
 
 gameController.on('startGame', (data) => {
@@ -67,6 +71,16 @@ gameController.on('timeUpdate', (data) => {
     gameController.players.forEach(player => {
         io.to(player.id).emit('timeUpdate', data);
     });
+});
+
+gameController.on('chatMessage', (data) => {
+    gameController.players.forEach(player => {
+        io.to(player.id).emit('chatMessage', data);
+    });
+});
+
+gameController.on('drawerMessageWarning', (data) => {
+    io.to(data.playerId).emit('chatMessage', data);
 });
 
 const port = process.env.PORT || 3000;
