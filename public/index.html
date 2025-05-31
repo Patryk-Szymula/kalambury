@@ -35,7 +35,8 @@
                 <h2>GRA W TRAKCIE</h2>
                 <h3>Pozostały czas: <span id="timer">0</span></h3>
                 <h3>Runda: <span id="roundCount">0</span></h3>
-                <h3>Rysujący: <span id="drawerName">###</span></h3>
+                <h3 id="drawerNameText">Rysujący: <span id="drawerName">###</span></h3>
+                <h3 id="currentAnswerText">Narysuj: <span id="currentAnswer">###</span></h3>
                 <!-- Chat container -->
                 <div id="chatBox">
                     <!-- Messages -->
@@ -46,7 +47,7 @@
                     <button id="chatButton">Wyślij</button>
                 <!-- Canvas drawing section -->
                 <div id="drawingSection">
-                <canvas id="drawingCanvas" width="600" height="400"></canvas>
+                    <canvas id="drawingCanvas" width="600" height="400"></canvas>
                     <div id="colorPicker">
                         <button class="color" data-color="black" style="background:black;"></button>
                         <button class="color" data-color="red" style="background:red;"></button>
