@@ -1,12 +1,12 @@
 // GAME LOGIC ON CLIENT
 
-import Drawing from './canvas.js';
+import Canvas from './canvas.js';
 
 class Game {
     constructor(socket) {
         this.socket = socket;
         this.players = [];
-        this.drawing = null;
+        this.drawing = new Canvas(socket);
     }
 
     init() {
@@ -54,6 +54,11 @@ class Game {
             document.getElementById('lobbyScreen').style.display = 'block';
         } else {
             document.getElementById('gameProgressScreen').style.display = 'block';
+            this.handleStartRound(data.roundInfo);
+            console.log(data.drawHistory)
+            data.drawHistory.forEach(e => {
+                this.drawing.drawLine(e.fromX, e.toX, e.fromY, e.toY, e.color);
+            })
         }
     }
 
@@ -88,24 +93,22 @@ class Game {
 
         document.getElementById('timer').innerHTML = data.roundTime;
         document.getElementById('roundCount').innerHTML = data.round;
-        document.getElementById('drawerName').innerHTML = data.drawerName;
+        document.getElementById('drawerName').innerHTML = data.drawer.name;
+        document.getElementById('currentAnswer').innerHTML = data.currentAnswer;
+        
+        console.log(document.getElementById('drawerName').parentNode.style.display)
 
-        const myName = this.socket.getPlayerName();
-        const isDrawer = (myName === data.drawerName);
-
-        const drawingSection = document.getElementById('drawingSection');
-        drawingSection.style.display = isDrawer ? 'block' : 'none';
-
-        if (isDrawer) {
-            if (!this.drawing) {
-                this.drawing = new Drawing('drawingCanvas', 'colorPicker');
-            }
+        if(data.drawer.id == this.socket.getId()){
+            document.getElementById('drawerNameText').style.display = 'none';
+            document.getElementById('currentAnswerText').style.display = 'block';
+            this.drawing.setForDrawer();
         } else {
-            if (this.drawing) {
-                this.drawing.clear();
-                this.drawing = null;
-            }
+            document.getElementById('drawerNameText').style.display = 'block';
+            document.getElementById('currentAnswerText').style.display = 'none';
+            this.drawing.setForPlayers();
         }
+
+        this.drawing.clear();
     }
 
     // Update remaining time of round

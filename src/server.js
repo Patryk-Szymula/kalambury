@@ -46,7 +46,7 @@ io.on('connect', (socket) => {
         console.log("Player joined, players list:");
         console.log(gameController.players);
         // Notify the player of joining succesful
-        socket.emit('joinSuccess', { playerName: playerName, gameStarted: gameController.gameStarted });
+        socket.emit('joinSuccess', { playerName: playerName, gameStarted: gameController.gameStarted, drawHistory: gameController.drawHistory, roundInfo: {round: gameController.roundIndex, drawer: gameController.players[gameController.drawerIndex], roundTime: gameController.roundTime, currentAnswer: gameController.currentAnswer} });
         // Update all players with the new players list
         gameController.players.forEach(player => {
             io.to(player.id).emit('playersUpdate', { players: gameController.players });
@@ -61,6 +61,14 @@ io.on('connect', (socket) => {
     // Handle chat message sent by a player
     socket.on('sendMessage', (message) => {
         gameController.handleMessage(socket.id, message);
+    })
+
+    // Handle draw sync
+    socket.on('draw', (data) => {
+        gameController.drawHistory.push(data);
+        gameController.players.filter(e => e.id != gameController.players[gameController.drawerIndex].id).forEach(player => {
+            io.to(player.id).emit('draw', data);
+        });
     })
 });
 

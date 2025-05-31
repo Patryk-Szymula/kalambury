@@ -44,6 +44,12 @@ class Socket {
                 this.onChatMessageCallback(data);
             }
         });
+        this.socket.on('draw', (data) => {
+            if (this.onDrawCallback) {
+                this.onDrawCallback(data);
+            }
+        });
+        
     }
 
     // Returning client ID method
@@ -67,7 +73,11 @@ class Socket {
     }
 
     sendMessage(message) {
-        this.socket.emit('sendMessage', message)
+        this.socket.emit('sendMessage', message);
+    }
+
+    draw(data){
+        this.socket.emit('draw', data);
     }
 
     // Client callbacks
@@ -94,6 +104,10 @@ class Socket {
 
     onChatMessage(callback) {
         this.onChatMessageCallback = callback;
+    }
+
+    onDraw(callback) {
+        this.onDrawCallback = callback;
     }
 }
 
