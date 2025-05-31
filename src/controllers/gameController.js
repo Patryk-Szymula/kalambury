@@ -1,7 +1,8 @@
 // GAME CONTROLLER ON SERVER
 
 class GameController {
-    constructor() {
+    constructor(dbController) {
+        this.dbController = dbController; // Database controller
         this.callbacks = {}; // Callbacks container
         this.players = []; // Players list
         this.gameStarted = false; // If game started flag
@@ -69,12 +70,15 @@ class GameController {
 
     // Starting round
     startRound() {
-        // Sending new round information to all players
-        this.emit('startRound', { round: this.roundIndex, drawer: this.players[this.drawerIndex], roundTime: this.roundTime, currentAnswer: this.currentAnswer });
+        this.drawHistory = [];
+        this.currentAnswer = this.dbController.getRandomWord();
+
         console.log(this.players)
         console.log(`Round: ${this.roundIndex}`)
         console.log(`Drawer: ${this.players[this.drawerIndex].name}`)
         console.log(`Answer: ${this.currentAnswer}`)
+        // Sending new round information to all players
+        this.emit('startRound', { round: this.roundIndex, drawer: this.players[this.drawerIndex], roundTime: this.roundTime, currentAnswer: this.currentAnswer });
 
         // Round timer
         let timeLeft = this.roundTime;
@@ -88,7 +92,7 @@ class GameController {
             }
         }, 1000);
 
-        this.drawHistory = [];
+        
     }
 
     // Switching round

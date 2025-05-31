@@ -18,4 +18,14 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('beforeunload', () => {
         socket.disconnect();
     });
+
+    // Set up listeners for navigation menu buttons
+    document.getElementById('gameButton').addEventListener('click', () => {
+        document.getElementById('gameScreen').style.display = "block";
+        document.getElementById('leaderBoardScreen').style.display = "none";
+    });
+    document.getElementById('leaderBoardButton').addEventListener('click', () => {
+        document.getElementById('gameScreen').style.display = "none";
+        document.getElementById('leaderBoardScreen').style.display = "block";
+    });
 });

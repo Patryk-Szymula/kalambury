@@ -4,6 +4,8 @@ const path = require("path");
 const http = require("http");
 const express = require('express');
 const socketio = require('socket.io');
+const fs = require('fs');
+const DatabaseController = require('./controllers/dbController');
 const GameController = require('./controllers/gameController');
 
 const app = express();
@@ -14,7 +16,8 @@ const publicDirectoryPath = path.join(__dirname, "../public");
 app.use(express.static(publicDirectoryPath));
 
 // Define variables
-let gameController = new GameController();
+let dbController = new DatabaseController(fs);
+let gameController = new GameController(dbController);
 let users = []; // List for all users connected to app
 
 // Handle client connection
