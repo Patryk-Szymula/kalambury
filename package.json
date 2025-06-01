@@ -18,7 +18,9 @@
   },
   "homepage": "https://github.com/Patryk-Szymula/kalambury#readme",
   "dependencies": {
+    "better-sqlite3": "^11.10.0",
     "express": "^5.1.0",
-    "socket.io": "^4.8.1"
+    "socket.io": "^4.8.1",
+    "sqlite3": "^5.1.7"
   }
 }
