@@ -20,6 +20,7 @@ class Game {
         this.socket.onGameStart((data) => this.handleGameStart(data));
         this.socket.onStartRound((data) => this.handleStartRound(data));
         this.socket.onTimeUpdate((data) => this.handleTimeUpdate(data));
+        this.socket.onEndGame((data) => this.handleEndGame(data));
     }
 
     // Join game function - send joining player's name to the server
@@ -95,10 +96,10 @@ class Game {
         document.getElementById('roundCount').innerHTML = data.round;
         document.getElementById('drawerName').innerHTML = data.drawer.name;
         document.getElementById('currentAnswer').innerHTML = data.currentAnswer;
-        
+
         console.log(document.getElementById('drawerName').parentNode.style.display)
 
-        if(data.drawer.id == this.socket.getId()){
+        if (data.drawer.id == this.socket.getId()) {
             document.getElementById('drawerNameText').style.display = 'none';
             document.getElementById('currentAnswerText').style.display = 'block';
             this.drawing.setForDrawer();
@@ -117,6 +118,14 @@ class Game {
         console.log(data)
 
         document.getElementById('timer').innerHTML = data.timeLeft;
+    }
+
+    // End game
+    handleEndGame(data) {
+        console.log("handleEndGame")
+        console.log(data)
+
+
     }
 }
 

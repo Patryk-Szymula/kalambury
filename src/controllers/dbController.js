@@ -7,13 +7,15 @@ class DatabaseController {
     constructor() {
         this.words = JSON.parse(fs.readFileSync('./src/db/words.json', 'utf-8')); // Reading file with words
         this.db = new sqlite3.Database('./src/db/main.db', (err) => {
-            if (err)
+            if (err) {
                 console.error(`Couldn't load database: ${err.message}`);
-            else
+            } else {
                 console.log('Database loaded succesfully.');
+                this.createResultTable();
+                //this.clearResults(); // Restoring database
+                this.getResults();
+            }
         });
-        this.createResultTable();
-        this.getResults();
     }
 
     // Returning random word method
@@ -27,26 +29,25 @@ class DatabaseController {
                 result_id INTEGER PRIMARY KEY,
                 playerName TEXT NOT NULL,
                 points INTEGER NOT NULL,
-                date DATETIME DEFAULT CURRENT_TIMESTAMP
+                date date TEXT DEFAULT (DATE('now'))
             )
         `;
-       this.db.prepare(query).run();
+        this.db.prepare(query).run();
     }
 
-    insertResult(data) {
-        // Inserting test values
-        /*
-        for(let i=0; i<10; i++){
-            const query = `
-                INSERT INTO results (playerName, points) VALUES ("Patryk", ${Math.floor(Math.random() * 15)*10})
-            `;
-            this.db.prepare(query).run()
-        }
-        */
-       const query = `
-            INSERT INTO results (playerName, points) VALUES ("${data.playerName}", ${data.points})
+    insertResult(player) {
+        console.log("Saving winner results.");
+        console.log(player);
+        const query = `
+            INSERT INTO results (playerName, points) VALUES (?, ?)
         `;
-        this.db.prepare(query).run();
+        this.db.run(query, [player.name, player.points], function (err) {
+            if (err) {
+                console.error(`Couldn't write result: ${err.message}`);
+            } else {
+                console.log("Result inserted successfully.");
+            }
+        });
     }
 
     getResults() {
@@ -55,9 +56,9 @@ class DatabaseController {
             SELECT * FROM results
         `;
         this.db.all(query, (err, rows) => {
-            if (err){
+            if (err) {
                 console.error(`Couldn't read results: ${err.message}`);
-            } else{
+            } else {
                 console.log('Results loaded succesfully.');
                 console.log(rows)
             }
@@ -70,7 +71,17 @@ class DatabaseController {
             DELETE FROM results;
             VACUUM;
         `;
-        this.db.prepare(query).run();o
+        this.db.run(query, (err, rows) => {
+            if (err) {
+                console.error(`Couldn't clear database: ${err.message}`);
+            } else {
+                console.log('Clearing database finished succesfully.');
+                // Inserting test values
+                for (let i = 0; i < 10; i++) {
+                    this.insertResult({ name: "Patryk", points: Math.floor(Math.random() * 15) * 10 });
+                }
+            }
+        });
     }
 }
 
