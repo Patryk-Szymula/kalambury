@@ -31,7 +31,7 @@ class Chat {
     // Handlers
     // Display message from the player
     handleChatMessage(data) {
-         console.log("handleChatMessage");
+        console.log("handleChatMessage");
         console.log(data);
 
         // Create container for a single message
@@ -41,6 +41,8 @@ class Chat {
         // Highlight own message
         if (data.playerId === this.socket.getId()) {
             messageDiv.classList.add('ownMessage');
+        } else {
+            messageDiv.classList.add('hintMessage');
         }
 
         // Create and populate author name element

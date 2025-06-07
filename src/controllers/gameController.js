@@ -5,7 +5,7 @@ class GameController {
         this.dbController = dbController; // Database controller
         this.callbacks = {}; // Callbacks container
         this.maxRound = 10; // Maximum round number
-        this.maxRoundTime = 100; // Maximum round time
+        this.maxRoundTime = 10; // Maximum round time
         this.roundTimer = null; // Round timer 
         this.init(); // Initialize default settings of a game
     };
@@ -19,6 +19,7 @@ class GameController {
         this.drawHistory = []; // Drawing history container
         if (this.roundTimer) clearInterval(this.roundTimer);
         this.timeLeft = this.maxRoundTime; // Round time left
+        this.hint = false; // Hint flag
     }
 
     on(event, callback) {
@@ -84,20 +85,24 @@ class GameController {
     startRound() {
         this.drawHistory = [];
         this.currentAnswer = this.dbController.getRandomWord();
+        this.hint = false;
 
         console.log(this.players)
         console.log(`Round: ${this.roundIndex}`)
         console.log(`Drawer: ${this.players[this.drawerIndex].name}`)
         console.log(`Answer: ${this.currentAnswer}`)
         // Sending new round information to all players
-        this.emit('startRound', { round: this.roundIndex, drawer: this.players[this.drawerIndex], roundTime: this.roundTime, currentAnswer: this.currentAnswer, players: this.players });
+        this.emit('startRound', { round: this.roundIndex, drawer: this.players[this.drawerIndex], roundTime: this.maxRoundTime, currentAnswer: this.currentAnswer, players: this.players });
 
         // Round timer
         this.timeLeft = this.maxRoundTime;
         this.roundTimer = setInterval(() => {
             this.timeLeft--;
             this.emit('timeUpdate', { timeLeft: this.timeLeft });
-
+            if (this.timeLeft / this.maxRoundTime <= 0.5 && !this.hint) {
+                this.hint = true;
+                this.emit('chatMessage', { playerId: null, playerName: "Podpowiedź", message: `${this.currentAnswer[0]}...` });
+            }
             if (this.timeLeft <= 0) {
                 clearInterval(this.roundTimer);
                 this.nextRound();
@@ -118,6 +123,7 @@ class GameController {
         }
     }
 
+    // Ending game
     endGame() {
         console.log("Ending game...");
         this.gameStarted = false;
