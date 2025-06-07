@@ -4,16 +4,22 @@ class GameController {
     constructor(dbController) {
         this.dbController = dbController; // Database controller
         this.callbacks = {}; // Callbacks container
+        this.maxRound = 10; // Maximum round number
+        this.maxRoundTime = 100; // Maximum round time
+        this.roundTimer = null; // Round timer 
+        this.init(); // Initialize default settings of a game
+    };
+
+    init() {
         this.players = []; // Players list
         this.gameStarted = false; // If game started flag
         this.drawerIndex = 0; // Current drawer index
         this.roundIndex = 1; // Current round index
-        this.maxRound = 10; // Maximum round number
-        this.roundTime = 20; // Remaining round time / Maximum round time
-        this.roundTimer = null; // Round timer 
         this.currentAnswer = "hasło"; // Current word to guess
-        this.drawHistory = [];
-    };
+        this.drawHistory = []; // Drawing history container
+        if (this.roundTimer) clearInterval(this.roundTimer);
+        this.timeLeft = this.maxRoundTime; // Round time left
+    }
 
     on(event, callback) {
         this.callbacks[event] = callback;
@@ -43,19 +49,25 @@ class GameController {
 
         // Remove player
         this.players = this.players.filter(e => e.id != playerId);
+        console.log("Player disconnected, players list:");
+        console.log(this.players);
 
-        // Change host
-        if (wasHost && this.players.length > 0)
-            this.players[0].isHost = true;
+        if (this.players.length > 1) {
+            // Change host
+            if (wasHost && this.players.length > 0)
+                this.players[0].isHost = true;
 
-        // Change drawer
-        if (playerIndex < this.drawerIndex && this.gameStarted) {
-            this.drawerIndex--;
-        }
-        // Change drawer and round if it was his turn
-        else if (playerIndex == this.drawerIndex && this.gameStarted) {
-            this.drawerIndex--;
-            this.nextRound();
+            // Change drawer
+            if (playerIndex < this.drawerIndex && this.gameStarted) {
+                this.drawerIndex--;
+            }
+            // Change drawer and round if it was his turn
+            else if (playerIndex == this.drawerIndex && this.gameStarted) {
+                this.drawerIndex--;
+                this.nextRound();
+            }
+        } else {
+            this.endGame(); // End game if there is only 1 player left
         }
     }
 
@@ -78,21 +90,19 @@ class GameController {
         console.log(`Drawer: ${this.players[this.drawerIndex].name}`)
         console.log(`Answer: ${this.currentAnswer}`)
         // Sending new round information to all players
-        this.emit('startRound', { round: this.roundIndex, drawer: this.players[this.drawerIndex], roundTime: this.roundTime, currentAnswer: this.currentAnswer });
+        this.emit('startRound', { round: this.roundIndex, drawer: this.players[this.drawerIndex], roundTime: this.roundTime, currentAnswer: this.currentAnswer, players: this.players });
 
         // Round timer
-        let timeLeft = this.roundTime;
+        this.timeLeft = this.maxRoundTime;
         this.roundTimer = setInterval(() => {
-            timeLeft--;
-            this.emit('timeUpdate', { timeLeft: timeLeft });
+            this.timeLeft--;
+            this.emit('timeUpdate', { timeLeft: this.timeLeft });
 
-            if (timeLeft <= 0) {
+            if (this.timeLeft <= 0) {
                 clearInterval(this.roundTimer);
                 this.nextRound();
             }
         }, 1000);
-
-        
     }
 
     // Switching round
@@ -103,7 +113,17 @@ class GameController {
         if (this.roundIndex <= this.maxRound) {
             this.drawerIndex = (this.drawerIndex + 1) % this.players.length;
             this.startRound();
+        } else {
+            this.endGame();
         }
+    }
+
+    endGame() {
+        console.log("Ending game...");
+        this.gameStarted = false;
+        this.dbController.insertResult(this.players.sort((a, b) => b.points - a.points)[0]);
+        this.emit('endGame', { players: this.players });
+        this.init();
     }
 
     // Read message from the player
@@ -120,7 +140,7 @@ class GameController {
             // Send message to all players 
             this.emit('chatMessage', { playerId: playerId, playerName: this.players.find(e => e.id == playerId).name, message: message });
             // Adding points for player who guessed correct answer
-            this.players.find(e => e.id == playerId).points += Math.min(Math.floor(this.roundTime / 5) + 1, 20);
+            this.players.find(e => e.id == playerId).points += Math.min(Math.floor(this.timeLeft / 5) + 1, this.maxRoundTime / 5);
             // Adding points for drawer
             this.players.find(e => e.id == this.players[this.drawerIndex].id).points += 10;
             this.nextRound();

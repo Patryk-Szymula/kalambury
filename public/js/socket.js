@@ -49,7 +49,11 @@ class Socket {
                 this.onDrawCallback(data);
             }
         });
-        
+        this.socket.on('endGame', (data) => {
+            if (this.onEndGameCallback) {
+                this.onEndGameCallback(data);
+            }
+        });
     }
 
     // Returning client ID method
@@ -76,7 +80,7 @@ class Socket {
         this.socket.emit('sendMessage', message);
     }
 
-    draw(data){
+    draw(data) {
         this.socket.emit('draw', data);
     }
 
@@ -108,6 +112,10 @@ class Socket {
 
     onDraw(callback) {
         this.onDrawCallback = callback;
+    }
+
+    onEndGame(callback) {
+        this.onEndGameCallback = callback;
     }
 }
 

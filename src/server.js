@@ -34,8 +34,6 @@ io.on('connect', (socket) => {
         // Remove player from the game
         if (gameController.players.find(e => e.id == socket.id)) {
             gameController.removePlayer(socket.id);
-            console.log("Player disconnected, players list:");
-            console.log(gameController.players);
             // Update all players with the new players list
             gameController.players.forEach(player => {
                 io.to(player.id).emit('playersUpdate', { players: gameController.players });
@@ -49,7 +47,7 @@ io.on('connect', (socket) => {
         console.log("Player joined, players list:");
         console.log(gameController.players);
         // Notify the player of joining succesful
-        socket.emit('joinSuccess', { playerName: playerName, gameStarted: gameController.gameStarted, drawHistory: gameController.drawHistory, roundInfo: {round: gameController.roundIndex, drawer: gameController.players[gameController.drawerIndex], roundTime: gameController.roundTime, currentAnswer: gameController.currentAnswer} });
+        socket.emit('joinSuccess', { playerName: playerName, gameStarted: gameController.gameStarted, drawHistory: gameController.drawHistory, roundInfo: { round: gameController.roundIndex, drawer: gameController.players[gameController.drawerIndex], roundTime: gameController.roundTime, currentAnswer: gameController.currentAnswer } });
         // Update all players with the new players list
         gameController.players.forEach(player => {
             io.to(player.id).emit('playersUpdate', { players: gameController.players });
@@ -103,6 +101,12 @@ gameController.on('chatMessage', (data) => {
 
 gameController.on('drawerMessageWarning', (data) => {
     io.to(data.playerId).emit('chatMessage', data);
+});
+
+gameController.on('endGame', (data) => {
+    gameController.players.forEach(player => {
+        io.to(player.id).emit('endGame', data);
+    });
 });
 
 // Set running server port
