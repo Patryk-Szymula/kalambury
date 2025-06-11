@@ -41,7 +41,7 @@ class Chat {
         // Highlight own message
         if (data.playerId === this.socket.getId()) {
             messageDiv.classList.add('ownMessage');
-        } else {
+        } else if (data.playerId === null) {
             messageDiv.classList.add('hintMessage');
         }
 
