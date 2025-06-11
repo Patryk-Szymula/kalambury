@@ -145,16 +145,56 @@ class GameController {
         else if (message.toLowerCase() == this.currentAnswer.toLowerCase()) {
             // Send message to all players 
             this.emit('chatMessage', { playerId: playerId, playerName: this.players.find(e => e.id == playerId).name, message: message });
+            // Send message about correct answer
+            this.emit('chatMessage', { playerId: null, playerName: `Gracz ${this.players.find(e => e.id == playerId).name} odgadł`, message: `${this.currentAnswer.toUpperCase()}` });
             // Adding points for player who guessed correct answer
             this.players.find(e => e.id == playerId).points += Math.min(Math.floor(this.timeLeft / 5) + 1, this.maxRoundTime / 5);
             // Adding points for drawer
             this.players.find(e => e.id == this.players[this.drawerIndex].id).points += 10;
             this.nextRound();
         }
+        // Send hint when close to correct answer
+        else if (this.optimalStringAlignmentDistance(message.toLowerCase(), this.currentAnswer.toLowerCase()) == 1 && playerId != this.players[this.drawerIndex].id) {
+            // Send message (hint) to typing player
+            this.emit('closeAnswerHint', { playerId: null, playerName: "Podpowiedź", message: `Jesteś bardzo blisko!`, toPlayerId: playerId });
+        }
         // Send message to all players 
         else {
             this.emit('chatMessage', { playerId: playerId, playerName: this.players.find(e => e.id == playerId).name, message: message });
         }
+    }
+
+    // Damerau-Levenshtein Distance Algorithm
+    // https://www.geeksforgeeks.org/damerau-levenshtein-distance/
+    optimalStringAlignmentDistance(s1, s2) {
+
+        // Create a table to store the results of subproblems
+        let dp = new Array(s1.length + 1).fill(0)
+            .map(() => new Array(s2.length + 1).fill(0));
+
+
+        // Initialize the table
+        for (let i = 0; i <= s1.length; i++) {
+            dp[i][0] = i;
+        }
+        for (let j = 0; j <= s2.length; j++) {
+            dp[0][j] = j;
+        }
+
+        // Populate the table using dynamic programming
+        for (let i = 1; i <= s1.length; i++) {
+            for (let j = 1; j <= s2.length; j++) {
+                if (s1[i - 1] === s2[j - 1]) {
+                    dp[i][j] = dp[i - 1][j - 1];
+                }
+                else {
+                    dp[i][j] = 1 + Math.min(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1]);
+                }
+            }
+        }
+
+        // Return the edit distance
+        return dp[s1.length][s2.length];
     }
 }
 

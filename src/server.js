@@ -103,6 +103,10 @@ gameController.on('drawerMessageWarning', (data) => {
     io.to(data.playerId).emit('chatMessage', data);
 });
 
+gameController.on('closeAnswerHint', (data) => {
+    io.to(data.toPlayerId).emit('chatMessage', data);
+});
+
 gameController.on('endGame', (data) => {
     gameController.players.forEach(player => {
         io.to(player.id).emit('endGame', data);
