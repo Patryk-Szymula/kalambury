@@ -49,12 +49,12 @@ class Game {
     handleJoinSuccess(data) {
         console.log("handleJoinSuccess")
         console.log(data)
-        document.getElementById('joinScreen').style.display = 'none';
+        document.getElementById('joinScreen').classList.add('d-none');
         console.log(!data.gameStarted)
         if (!data.gameStarted) {
-            document.getElementById('lobbyScreen').style.display = 'block';
+            document.getElementById('lobbyScreen').classList.remove('d-none');
         } else {
-            document.getElementById('gameProgressScreen').style.display = 'block';
+            document.getElementById('gameProgressScreen').classList.remove('d-none');
             this.handleStartRound(data.roundInfo);
             console.log(data.drawHistory)
             data.drawHistory.forEach(e => {
@@ -83,8 +83,8 @@ class Game {
         console.log("handleGameStart")
         console.log(data)
 
-        document.getElementById('lobbyScreen').style.display = 'none';
-        document.getElementById('gameProgressScreen').style.display = 'block';
+        document.getElementById('lobbyScreen').classList.add('d-none');
+        document.getElementById('gameProgressScreen').classList.remove('d-none');
     }
 
     // Update new round information
