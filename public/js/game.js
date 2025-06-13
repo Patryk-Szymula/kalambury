@@ -69,7 +69,7 @@ class Game {
         console.log(data)
         this.players = data.players;
 
-        if (this.players.find(e => e.isHost).id == this.socket.getId()) {
+        if (data.players.find(e => e.isHost).id == this.socket.getId()) {
             document.getElementById('startButton').style.display = 'block';
         } else {
             document.getElementById('startButton').style.display = 'none';
