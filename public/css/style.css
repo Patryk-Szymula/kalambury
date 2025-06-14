@@ -1,24 +1,11 @@
 /* GŁÓWNY PLIK ARKUSZY STYLÓW */
 
 
-#lobbyScreen {
-  display: none;
-}
-
 #startButton {
   display: none;
 }
 
-#gameProgressScreen {
-  display: none;
-}
-
 #chatBox {
-  display: flex;
-  flex-direction: column;
-  height: 250px;
-  width: 100%;
-  max-width: 500px;
   margin-top: 20px;
   background-color: #f0f0f0;
   border-radius: 10px;
@@ -93,8 +80,6 @@
 #drawingSection {
   margin-top: 20px;
   border: 2px solid #444;
-  width: 620px;
-  /* trochę większe niż canvas, żeby była ramka */
   padding: 10px;
   background-color: #f9f9f9;
   border-radius: 8px;
