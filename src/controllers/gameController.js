@@ -69,7 +69,7 @@ class GameController {
             }
             // Update clients with current players list
             this.emit('playersUpdate', { players: this.players });
-        } else if (this.players.length >= 1) {
+        } else if (this.players.length >= 1 && !this.gameStarted) {
             // Change host
             if (wasHost && this.players.length > 0)
                 this.players[0].isHost = true;
