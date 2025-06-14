@@ -34,10 +34,6 @@ io.on('connect', (socket) => {
         // Remove player from the game
         if (gameController.players.find(e => e.id == socket.id)) {
             gameController.removePlayer(socket.id);
-            // Update all players with the new players list
-            gameController.players.forEach(player => {
-                io.to(player.id).emit('playersUpdate', { players: gameController.players });
-            });
         }
     });
 
@@ -48,10 +44,6 @@ io.on('connect', (socket) => {
         console.log(gameController.players);
         // Notify the player of joining succesful
         socket.emit('joinSuccess', { playerName: playerName, gameStarted: gameController.gameStarted, drawHistory: gameController.drawHistory, roundInfo: { round: gameController.roundIndex, drawer: gameController.players[gameController.drawerIndex], roundTime: gameController.roundTime, currentAnswer: gameController.currentAnswer } });
-        // Update all players with the new players list
-        gameController.players.forEach(player => {
-            io.to(player.id).emit('playersUpdate', { players: gameController.players });
-        });
     });
 
     // Handle game start request from a client
@@ -112,6 +104,13 @@ gameController.on('endGame', (data) => {
         io.to(player.id).emit('endGame', data);
     });
 });
+
+gameController.on('playersUpdate', (data) => {
+    gameController.players.forEach(player => {
+        io.to(player.id).emit('playersUpdate', data);
+    });
+});
+
 
 // Set running server port
 const port = process.env.PORT || 3000;
