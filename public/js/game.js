@@ -13,6 +13,7 @@ class Game {
         // Register event listeners for buttons
         document.getElementById('joinButton').addEventListener("click", () => this.join());
         document.getElementById('startButton').addEventListener("click", () => this.start());
+        document.getElementById('finishButton').addEventListener("click", () => this.finish());
 
         // Register client callbacks handlers
         this.socket.onJoinSuccess((data) => this.handleJoinSuccess(data));
@@ -48,26 +49,33 @@ class Game {
     // Rednder round results
     renderResults(players) {
         console.log("Rendering results table");
+        console.log(players)
         players = players.sort((a, b) => b.points - a.points);
         const elements = document.querySelectorAll('.resultsBody');
+        console.log(elements)
         elements.forEach(e => {
             e.innerHTML = "";
-        });
-        for (let i = 0; i < players.length; i++) {
-            const tr = document.createElement("tr");
-            const td1 = document.createElement("td");
-            td1.innerText = i + 1;
-            tr.appendChild(td1);
-            const td2 = document.createElement("td");
-            td2.innerText = players[i].name;
-            tr.appendChild(td2);
-            const td3 = document.createElement("td");
-            td3.innerText = players[i].points;
-            tr.appendChild(td3);
-            elements.forEach(e => {
+            for (let i = 0; i < players.length; i++) {
+                const tr = document.createElement("tr");
+                const td1 = document.createElement("td");
+                td1.innerText = i + 1;
+                tr.appendChild(td1);
+                const td2 = document.createElement("td");
+                td2.innerText = players[i].name;
+                tr.appendChild(td2);
+                const td3 = document.createElement("td");
+                td3.innerText = players[i].points;
+                tr.appendChild(td3);
+                console.log(tr)
                 e.appendChild(tr);
-            });
-        }
+            }
+        });
+
+    }
+
+    finish() {
+        document.getElementById('joinScreen').classList.remove('d-none');
+        document.getElementById('endGameScreen').classList.add('d-none');
     }
 
 
