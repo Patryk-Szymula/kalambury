@@ -21,6 +21,7 @@ class Game {
         this.socket.onStartRound((data) => this.handleStartRound(data));
         this.socket.onTimeUpdate((data) => this.handleTimeUpdate(data));
         this.socket.onEndGame((data) => this.handleEndGame(data));
+        this.socket.onSendLeaderBoard((data) => this.handleSendLeaderBoard(data));
     }
 
     // Join game function - send joining player's name to the server
@@ -43,6 +44,32 @@ class Game {
         }
         this.socket.startGame()
     }
+
+    // Rednder round results
+    renderResults(players) {
+        console.log("Rendering results table");
+        players = players.sort((a, b) => b.points - a.points);
+        const elements = document.querySelectorAll('.resultsBody');
+        elements.forEach(e => {
+            e.innerHTML = "";
+        });
+        for (let i = 0; i < players.length; i++) {
+            const tr = document.createElement("tr");
+            const td1 = document.createElement("td");
+            td1.innerText = i + 1;
+            tr.appendChild(td1);
+            const td2 = document.createElement("td");
+            td2.innerText = players[i].name;
+            tr.appendChild(td2);
+            const td3 = document.createElement("td");
+            td3.innerText = players[i].points;
+            tr.appendChild(td3);
+            elements.forEach(e => {
+                e.appendChild(tr);
+            });
+        }
+    }
+
 
     // Callback handlers
     // Change screen after joining the game
@@ -77,6 +104,8 @@ class Game {
         }
 
         document.getElementById('playerCount').innerHTML = this.players.length;
+
+        this.renderResults(data.players);
     }
 
     // Change screen after starting the game
@@ -112,22 +141,48 @@ class Game {
         }
 
         this.drawing.clear();
+
+        this.renderResults(data.players);
     }
 
     // Update remaining time of round
     handleTimeUpdate(data) {
         console.log("handleTimeUpdate")
         console.log(data)
-
         document.getElementById('timer').innerHTML = data.timeLeft;
     }
 
     // End game
     handleEndGame(data) {
-        console.log("handleEndGame")
-        console.log(data)
+        console.log("handleEndGame");
+        console.log(data);
 
+        document.getElementById('gameProgressScreen').classList.add('d-none');
+        document.getElementById('endGameScreen').classList.remove('d-none');
+        document.getElementById("winner").innerText = data.players[0].name;
+        this.renderResults(data.players);
+    }
 
+    // Leader Board
+    handleSendLeaderBoard(data) {
+        console.log("handleSendLeaderBoard");
+        console.log(data);
+
+        data.results = data.results.sort((a, b) => b.points - a.points);
+        document.getElementById("leaderBoardBody").innerHTML = "";
+        for (let i = 0; i < 10; i++) {
+            const tr = document.createElement("tr");
+            const td1 = document.createElement("td");
+            td1.innerText = i + 1;
+            tr.appendChild(td1);
+            const td2 = document.createElement("td");
+            td2.innerText = data.results[i].playerName;
+            tr.appendChild(td2);
+            const td3 = document.createElement("td");
+            td3.innerText = data.results[i].points;
+            tr.appendChild(td3);
+            document.getElementById("leaderBoardBody").appendChild(tr);
+        }
     }
 }
 
