@@ -1,6 +1,5 @@
 /* GŁÓWNY PLIK ARKUSZY STYLÓW */
 
-
 #startButton {
   display: none;
 }
@@ -92,10 +91,6 @@
   background-color: white;
   border: 1px solid #ccc;
   cursor: crosshair;
-  width: 600px;
-  /* szerokość zgodna z HTML */
-  height: 400px;
-  /* wysokość zgodna z HTML */
   touch-action: none;
   /* poprawa obsługi dotyku */
   border-radius: 4px;

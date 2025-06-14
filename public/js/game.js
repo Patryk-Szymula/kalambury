@@ -55,6 +55,7 @@ class Game {
             document.getElementById('lobbyScreen').classList.remove('d-none');
         } else {
             document.getElementById('gameProgressScreen').classList.remove('d-none');
+            this.drawing.resizeCanvas();
             this.handleStartRound(data.roundInfo);
             console.log(data.drawHistory)
             data.drawHistory.forEach(e => {
@@ -85,6 +86,7 @@ class Game {
 
         document.getElementById('lobbyScreen').classList.add('d-none');
         document.getElementById('gameProgressScreen').classList.remove('d-none');
+        this.drawing.resizeCanvas();
     }
 
     // Update new round information

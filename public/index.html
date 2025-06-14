@@ -12,81 +12,92 @@
     <script src="js/main.js" type="module"></script>
 </head>
 
-<body>
-    <!-- Main container (entire app) -->
-    <div id="mainScreen" class="d-flex w-100 min-vh-100 p-3 mx-auto flex-column">
-        <!-- Header section -->
+<body class="h-100">
+    <div id="mainScreen" class="d-flex flex-column min-vh-100">
+
+        <!-- Header -->
         <div id="header" class="d-flex justify-content-center py-3 border-bottom">
             <ul class="nav nav-pills">
                 <li class="nav-item active"><a href="#" id="gameButton" class="nav-link active">Gra</a></li>
                 <li class="nav-item"><a href="#" id="leaderBoardButton" class="nav-link">Wyniki</a></li>
             </ul>
         </div>
-        <!-- Game container - switching by menu -->
-        <div id="gameScreen" class="flex-grow-1 p-3 d-flex justify-content-center align-items-center">
-            <!-- Joining screen - switching by script -->
-            <div id="joinScreen" class="text-center d-flex flex-column">
+
+        <!-- Game Screen -->
+        <div id="gameScreen" class="flex-grow-1 d-flex flex-column position-relative">
+
+            <!-- Join Screen -->
+            <div id="joinScreen"
+                class="d-flex flex-column justify-content-center align-items-center flex-grow-1 text-center">
                 <h2 class="mb-5">KALAMBURY</h2>
                 <h5 class="mb-2">Witaj w grze kalambury!</h5>
                 <p>Aby dołączyć do gry wpisz swoją nazwę poniżej i dołącz do gry. Miłej zabawy!</p>
                 <p>W celu sprawdzenia tabeli wyników, przejdź na zakładkę Wyniki.</p>
-                <input id="joinInput" type="text" name="playerName" class="form-control w-50 my-3 mx-auto"
-                    placeholder=" Twoja nazwa">
-                <button id="joinButton" class="btn btn-primary px-4 gap-2 w-50 mx-auto">Dołącz</button>
+                <input id="joinInput" type="text" name="playerName" class="form-control w-50 my-3"
+                    placeholder="Twoja nazwa">
+                <button id="joinButton" class="btn btn-primary px-4 w-50">Dołącz</button>
             </div>
-            <!-- Lobby screen - switching by script -->
-            <div id="lobbyScreen" class="text-center d-none d-flex flex-column">
+
+            <!-- Lobby Screen -->
+            <div id="lobbyScreen"
+                class="d-none d-flex flex-column justify-content-center align-items-center flex-grow-1 text-center">
                 <h2 class="mb-5">Oczekiwanie na start</h2>
                 <h5 class="mb-2">Liczba graczy: <span id="playerCount">0</span></h5>
-                <button id="startButton" class="btn btn-primary px-4 gap-2 w-50 mx-auto">Start</button>
+                <button id="startButton" class="btn btn-primary px-4 w-50">Start</button>
             </div>
-            <!-- Game in progress screen - switching by script -->
-            <div id="gameProgressScreen" class="text-center d-none d-flex flex-column">
+
+            <!-- Game Progress Screen -->
+            <div id="gameProgressScreen" class="d-none d-flex flex-column flex-grow-1">
                 <h3>Pozostały czas: <span id="timer">0</span></h3>
                 <h3>Runda: <span id="roundCount">0</span></h3>
                 <h3 id="drawerNameText">Rysujący: <span id="drawerName">###</span></h3>
                 <h3 id="currentAnswerText">Narysuj: <span id="currentAnswer">###</span></h3>
-                <div class="row">
-                    <!-- Canvas drawing section -->
-                    <div id="drawingSection" class="col-8">
-                        <canvas id="drawingCanvas" width="600" height="400"></canvas>
-                        <div id="colorPicker">
-                            <button class="color" data-color="black" style="background:black;"></button>
-                            <button class="color" data-color="red" style="background:red;"></button>
-                            <button class="color" data-color="blue" style="background:blue;"></button>
-                            <button class="color" data-color="green" style="background:green;"></button>
-                            <button class="color" data-color="white" style="background:white;"></button>
+
+                <div class="row mt-3 px-3">
+                    <!-- Drawing -->
+                    <div id="drawingSection" class="col-md-8 d-flex flex-column py-3 px-3">
+                        <div class="ratio ratio-4x3">
+                            <canvas id="drawingCanvas" class="w-100 h-100 border border-dark"></canvas>
+                        </div>
+                        <div id="colorPicker" class="mt-2 d-flex gap-2">
+                            <button class="color btn btn-sm border" data-color="black"
+                                style="background:black;"></button>
+                            <button class="color btn btn-sm border" data-color="red" style="background:red;"></button>
+                            <button class="color btn btn-sm border" data-color="blue" style="background:blue;"></button>
+                            <button class="color btn btn-sm border" data-color="green"
+                                style="background:green;"></button>
+                            <button class="color btn btn-sm border" data-color="white"
+                                style="background:white;"></button>
                         </div>
                     </div>
-                    <div class="col-4">
-                        <!-- Chat container -->
-                        <div id="chatBox" class="h-50">
-                            <!-- Messages -->
-                            <div id="messagesBox"></div>
-                            <!-- Chat controls -->
-                            <input id="chatInput" type="text" name="chatMessage">
-                            <button id="chatButton">Wyślij</button>
-                        </div>
-                        <!-- Results container -->
-                        <div id="resultsBox" class="h-50">
 
+                    <!-- Chat + Results -->
+                    <div class="col-md-4 d-flex flex-column py-3 px-3">
+                        <div id="chatBox" class="flex-grow-1 mb-2 border p-2 d-flex flex-column">
+                            <div id="messagesBox" class="mb-2 flex-grow-1 h-100"></div>
+                            <div class="input-group">
+                                <input id="chatInput" type="text" class="form-control" placeholder="Wpisz wiadomość">
+                                <button id="chatButton" class="btn btn-primary">Wyślij</button>
+                            </div>
+                        </div>
+                        <div id="resultsBox" class="border p-2 flex-grow-1 overflow-auto d-flex flex-column">
+                            <!-- Wyniki rundy -->
                         </div>
                     </div>
                 </div>
-
-
-
             </div>
         </div>
-        <!-- Leaderboard container - switching by menu -->
-        <div id="leaderBoardScreen" class="flex-grow-1 d-none">
-            <div id="leaderBoard">
 
+        <!-- Leaderboard -->
+        <div id="leaderBoardScreen" class="d-none flex-grow-1 p-3">
+            <div id="leaderBoard" class="text-center">
+                <!-- Wyniki -->
             </div>
         </div>
-        <!-- Footer section -->
-        <div id="footer" class="py-3 my-4 border-top mt-auto">
-            <p class="text-center">Patryk Szymula | Izabela Zientarska</p>
+
+        <!-- Footer -->
+        <div id="footer" class="py-3 border-top text-center">
+            <p>Patryk Szymula | Izabela Zientarska</p>
         </div>
     </div>
 </body>
