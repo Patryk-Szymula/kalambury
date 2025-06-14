@@ -4,8 +4,8 @@ class GameController {
     constructor(dbController) {
         this.dbController = dbController; // Database controller
         this.callbacks = {}; // Callbacks container
-        this.maxRound = 10; // Maximum round number
-        this.maxRoundTime = 10; // Maximum round time
+        this.maxRound = 1; // Maximum round number
+        this.maxRoundTime = 100; // Maximum round time
         this.roundTimer = null; // Round timer 
         this.init(); // Initialize default settings of a game
     };
@@ -135,7 +135,8 @@ class GameController {
     endGame() {
         console.log("Ending game...");
         this.gameStarted = false;
-        this.dbController.insertResult(this.players.sort((a, b) => b.points - a.points)[0]);
+        this.players = this.players.sort((a, b) => b.points - a.points);
+        this.dbController.insertResult(this.players[0]);
         this.emit('endGame', { players: this.players });
         this.init();
     }

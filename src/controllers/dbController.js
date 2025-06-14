@@ -13,9 +13,20 @@ class DatabaseController {
                 console.log('Database loaded succesfully.');
                 this.createResultTable();
                 //this.clearResults(); // Restoring database
-                this.getResults();
+                this.getResults(null);
             }
         });
+        this.callbacks = {}; // Callbacks container
+    }
+
+    on(event, callback) {
+        this.callbacks[event] = callback;
+    }
+
+    emit(event, data) {
+        if (this.callbacks[event]) {
+            this.callbacks[event](data);
+        }
     }
 
     // Returning random word method
@@ -50,7 +61,7 @@ class DatabaseController {
         });
     }
 
-    getResults() {
+    getResults(playerId) {
         console.log("reading results")
         const query = `
             SELECT * FROM results
@@ -61,6 +72,7 @@ class DatabaseController {
             } else {
                 console.log('Results loaded succesfully.');
                 console.log(rows)
+                this.emit('sendLeaderBoard', { results: rows, playerId: playerId })
             }
         });
     }

@@ -81,17 +81,63 @@
                             </div>
                         </div>
                         <div id="resultsBox" class="flex-grow-1 mb-2 border p-2 d-flex flex-column">
-                            <!-- Wyniki rundy -->
+                            <!-- Results -->
+                            <div class="table-responsive small">
+                                <table class="table table-striped table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Gracz</th>
+                                            <th scope="col">Punty</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="resultsBody"></tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <!-- End Game Screen -->
+            <div id="endGameScreen"
+                class="d-none d-flex flex-column justify-content-center align-items-center flex-grow-1 text-center">
+                <h2 class="mb-5">Koniec gry</h2>
+                <h5 class="mb-2">Zwycięzca: <span id="winner">XYZ</span></h5>
+                <!-- Game results -->
+                <div class="table-responsive small w-50 mx-auto">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Gracz</th>
+                                <th scope="col">Punty</th>
+                            </tr>
+                        </thead>
+                        <tbody class="resultsBody"></tbody>
+                    </table>
+                </div>
+                <button id="homeButton" class="btn btn-primary px-4 w-10">Koniec</button>
+            </div>
         </div>
 
         <!-- Leaderboard -->
-        <div id="leaderBoardScreen" class="d-none flex-grow-1 p-3">
-            <div id="leaderBoard" class="text-center">
-                <!-- Wyniki -->
+        <div id="leaderBoardScreen"
+            class="d-none d-flex flex-column justify-content-center align-items-center flex-grow-1 text-center">
+            <h2 class="mb-5">Ranking</h2>
+            <h5 class="mb-2">Poniżej znajduje się ranking 10 najlepszych graczy w historii.</h5>
+            <!-- Game results -->
+            <div class="table-responsive small w-50 mx-auto">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Gracz</th>
+                            <th scope="col">Punty</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderBoardBody"></tbody>
+                </table>
             </div>
         </div>
 

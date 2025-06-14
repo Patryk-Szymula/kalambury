@@ -63,6 +63,11 @@ io.on('connect', (socket) => {
             io.to(player.id).emit('draw', data);
         });
     })
+
+    // Handle get leaderboard
+    socket.on('getLeaderBoard', () => {
+        dbController.getResults(socket.id);
+    })
 });
 
 // Game controller callbacks handlers
@@ -111,6 +116,9 @@ gameController.on('playersUpdate', (data) => {
     });
 });
 
+dbController.on('sendLeaderBoard', (data) => {
+    io.to(data.playerId).emit('sendLeaderBoard', data);
+});
 
 // Set running server port
 const port = process.env.PORT || 3000;
