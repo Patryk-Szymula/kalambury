@@ -5,7 +5,7 @@ class GameController {
         this.dbController = dbController; // Database controller
         this.callbacks = {}; // Callbacks container
         this.maxRound = 10; // Maximum round number
-        this.maxRoundTime = 10; // Maximum round time
+        this.maxRoundTime = 100; // Maximum round time
         this.roundTimer = null; // Round timer 
         this.init(); // Initialize default settings of a game
     };
@@ -41,6 +41,7 @@ class GameController {
             isHost: this.players.length == 0
         };
         this.players.push(player);
+        this.emit('playersUpdate', { players: this.players });
     }
 
     // Removing player
@@ -53,22 +54,29 @@ class GameController {
         console.log("Player disconnected, players list:");
         console.log(this.players);
 
-        if (this.players.length > 1) {
+        if (this.players.length > 1 && this.gameStarted) {
             // Change host
             if (wasHost && this.players.length > 0)
                 this.players[0].isHost = true;
-
             // Change drawer
-            if (playerIndex < this.drawerIndex && this.gameStarted) {
+            if (playerIndex < this.drawerIndex) {
                 this.drawerIndex--;
             }
             // Change drawer and round if it was his turn
-            else if (playerIndex == this.drawerIndex && this.gameStarted) {
+            else if (playerIndex == this.drawerIndex) {
                 this.drawerIndex--;
                 this.nextRound();
             }
+            // Update clients with current players list
+            this.emit('playersUpdate', { players: this.players });
+        } else if (this.players.length >= 1 && !this.gameStarted) {
+            // Change host
+            if (wasHost && this.players.length > 0)
+                this.players[0].isHost = true;
+            // Update clients with current players list
+            this.emit('playersUpdate', { players: this.players });
         } else {
-            this.endGame(); // End game if there is only 1 player left
+            this.endGame(); // End game if there is only 1 player left and game is in progress
         }
     }
 
@@ -127,7 +135,8 @@ class GameController {
     endGame() {
         console.log("Ending game...");
         this.gameStarted = false;
-        this.dbController.insertResult(this.players.sort((a, b) => b.points - a.points)[0]);
+        this.players = this.players.sort((a, b) => b.points - a.points);
+        this.dbController.insertResult(this.players[0]);
         this.emit('endGame', { players: this.players });
         this.init();
     }

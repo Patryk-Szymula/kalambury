@@ -54,6 +54,11 @@ class Socket {
                 this.onEndGameCallback(data);
             }
         });
+        this.socket.on('sendLeaderBoard', (data) => {
+            if (this.onSendLeaderBoardCallback) {
+                this.onSendLeaderBoardCallback(data);
+            }
+        });
     }
 
     // Returning client ID method
@@ -82,6 +87,10 @@ class Socket {
 
     draw(data) {
         this.socket.emit('draw', data);
+    }
+
+    getLeaderBoard() {
+        this.socket.emit('getLeaderBoard');
     }
 
     // Client callbacks
@@ -116,6 +125,10 @@ class Socket {
 
     onEndGame(callback) {
         this.onEndGameCallback = callback;
+    }
+
+    onSendLeaderBoard(callback) {
+        this.onSendLeaderBoardCallback = callback;
     }
 }
 

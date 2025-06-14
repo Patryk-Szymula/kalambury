@@ -21,11 +21,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Set up listeners for navigation menu buttons
     document.getElementById('gameButton').addEventListener('click', () => {
-        document.getElementById('gameScreen').style.display = "block";
-        document.getElementById('leaderBoardScreen').style.display = "none";
+        document.getElementById('gameScreen').classList.remove("d-none");
+        document.getElementById('leaderBoardScreen').classList.add("d-none");
+        document.getElementById('gameButton').classList.add("active");
+        document.getElementById('leaderBoardButton').classList.remove("active");
     });
     document.getElementById('leaderBoardButton').addEventListener('click', () => {
-        document.getElementById('gameScreen').style.display = "none";
-        document.getElementById('leaderBoardScreen').style.display = "block";
+        document.getElementById('gameScreen').classList.add("d-none");
+        document.getElementById('leaderBoardScreen').classList.remove("d-none");
+        document.getElementById('gameButton').classList.remove("active");
+        document.getElementById('leaderBoardButton').classList.add("active");
+        socket.getLeaderBoard();
     });
 });

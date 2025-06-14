@@ -34,10 +34,6 @@ io.on('connect', (socket) => {
         // Remove player from the game
         if (gameController.players.find(e => e.id == socket.id)) {
             gameController.removePlayer(socket.id);
-            // Update all players with the new players list
-            gameController.players.forEach(player => {
-                io.to(player.id).emit('playersUpdate', { players: gameController.players });
-            });
         }
     });
 
@@ -48,10 +44,6 @@ io.on('connect', (socket) => {
         console.log(gameController.players);
         // Notify the player of joining succesful
         socket.emit('joinSuccess', { playerName: playerName, gameStarted: gameController.gameStarted, drawHistory: gameController.drawHistory, roundInfo: { round: gameController.roundIndex, drawer: gameController.players[gameController.drawerIndex], roundTime: gameController.roundTime, currentAnswer: gameController.currentAnswer } });
-        // Update all players with the new players list
-        gameController.players.forEach(player => {
-            io.to(player.id).emit('playersUpdate', { players: gameController.players });
-        });
     });
 
     // Handle game start request from a client
@@ -70,6 +62,11 @@ io.on('connect', (socket) => {
         gameController.players.filter(e => e.id != gameController.players[gameController.drawerIndex].id).forEach(player => {
             io.to(player.id).emit('draw', data);
         });
+    })
+
+    // Handle get leaderboard
+    socket.on('getLeaderBoard', () => {
+        dbController.getResults(socket.id);
     })
 });
 
@@ -111,6 +108,16 @@ gameController.on('endGame', (data) => {
     gameController.players.forEach(player => {
         io.to(player.id).emit('endGame', data);
     });
+});
+
+gameController.on('playersUpdate', (data) => {
+    gameController.players.forEach(player => {
+        io.to(player.id).emit('playersUpdate', data);
+    });
+});
+
+dbController.on('sendLeaderBoard', (data) => {
+    io.to(data.playerId).emit('sendLeaderBoard', data);
 });
 
 // Set running server port
