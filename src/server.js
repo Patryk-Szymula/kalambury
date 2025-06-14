@@ -43,7 +43,7 @@ io.on('connect', (socket) => {
         console.log("Player joined, players list:");
         console.log(gameController.players);
         // Notify the player of joining succesful
-        socket.emit('joinSuccess', { playerName: playerName, gameStarted: gameController.gameStarted, drawHistory: gameController.drawHistory, roundInfo: { round: gameController.roundIndex, drawer: gameController.players[gameController.drawerIndex], roundTime: gameController.roundTime, currentAnswer: gameController.currentAnswer } });
+        socket.emit('joinSuccess', { playerName: playerName, gameStarted: gameController.gameStarted, drawHistory: gameController.drawHistory, roundInfo: { round: gameController.roundIndex, drawer: gameController.players[gameController.drawerIndex], roundTime: gameController.roundTime, currentAnswer: gameController.currentAnswer, players: gameController.players } });
     });
 
     // Handle game start request from a client
