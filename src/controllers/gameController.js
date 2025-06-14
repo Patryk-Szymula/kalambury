@@ -4,7 +4,7 @@ class GameController {
     constructor(dbController) {
         this.dbController = dbController; // Database controller
         this.callbacks = {}; // Callbacks container
-        this.maxRound = 1; // Maximum round number
+        this.maxRound = 10; // Maximum round number
         this.maxRoundTime = 100; // Maximum round time
         this.roundTimer = null; // Round timer 
         this.init(); // Initialize default settings of a game
