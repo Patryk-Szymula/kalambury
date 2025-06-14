@@ -24,7 +24,7 @@
         </div>
 
         <!-- Game Screen -->
-        <div id="gameScreen" class="flex-grow-1 d-flex flex-column position-relative">
+        <div id="gameScreen" class="flex-grow-1 d-flex flex-column">
 
             <!-- Join Screen -->
             <div id="joinScreen"
@@ -33,9 +33,9 @@
                 <h5 class="mb-2">Witaj w grze kalambury!</h5>
                 <p>Aby dołączyć do gry wpisz swoją nazwę poniżej i dołącz do gry. Miłej zabawy!</p>
                 <p>W celu sprawdzenia tabeli wyników, przejdź na zakładkę Wyniki.</p>
-                <input id="joinInput" type="text" name="playerName" class="form-control w-50 my-3"
+                <input id="joinInput" type="text" name="playerName" class="form-control w-25 my-3"
                     placeholder="Twoja nazwa">
-                <button id="joinButton" class="btn btn-primary px-4 w-50">Dołącz</button>
+                <button id="joinButton" class="btn btn-primary px-4 w-10">Dołącz</button>
             </div>
 
             <!-- Lobby Screen -->
@@ -43,7 +43,7 @@
                 class="d-none d-flex flex-column justify-content-center align-items-center flex-grow-1 text-center">
                 <h2 class="mb-5">Oczekiwanie na start</h2>
                 <h5 class="mb-2">Liczba graczy: <span id="playerCount">0</span></h5>
-                <button id="startButton" class="btn btn-primary px-4 w-50">Start</button>
+                <button id="startButton" class="btn btn-primary px-4 w-10">Start</button>
             </div>
 
             <!-- Game Progress Screen -->
@@ -53,7 +53,7 @@
                 <h3 id="drawerNameText">Rysujący: <span id="drawerName">###</span></h3>
                 <h3 id="currentAnswerText">Narysuj: <span id="currentAnswer">###</span></h3>
 
-                <div class="row mt-3 px-3">
+                <div id="gameSection" class="row mt-3 px-3">
                     <!-- Drawing -->
                     <div id="drawingSection" class="col-md-8 d-flex flex-column py-3 px-3">
                         <div class="ratio ratio-4x3">
@@ -74,13 +74,13 @@
                     <!-- Chat + Results -->
                     <div class="col-md-4 d-flex flex-column py-3 px-3">
                         <div id="chatBox" class="flex-grow-1 mb-2 border p-2 d-flex flex-column">
-                            <div id="messagesBox" class="mb-2 flex-grow-1 h-100"></div>
+                            <div id="messagesBox" class="mb-2 flex-grow-1"></div>
                             <div class="input-group">
                                 <input id="chatInput" type="text" class="form-control" placeholder="Wpisz wiadomość">
                                 <button id="chatButton" class="btn btn-primary">Wyślij</button>
                             </div>
                         </div>
-                        <div id="resultsBox" class="border p-2 flex-grow-1 overflow-auto d-flex flex-column">
+                        <div id="resultsBox" class="flex-grow-1 mb-2 border p-2 d-flex flex-column">
                             <!-- Wyniki rundy -->
                         </div>
                     </div>
