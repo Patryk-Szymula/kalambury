@@ -66,7 +66,6 @@ class Game {
                 const td3 = document.createElement("td");
                 td3.innerText = players[i].points;
                 tr.appendChild(td3);
-                console.log(tr)
                 e.appendChild(tr);
             }
         });
@@ -94,7 +93,13 @@ class Game {
             this.handleStartRound(data.roundInfo);
             console.log(data.drawHistory)
             data.drawHistory.forEach(e => {
-                this.drawing.drawLine(e.fromX, e.toX, e.fromY, e.toY, e.color);
+                this.drawing.drawLine(
+                    e.fromX * this.drawing.canvas.width,
+                    e.toX * this.drawing.canvas.width,
+                    e.fromY * this.drawing.canvas.height,
+                    e.toY * this.drawing.canvas.height,
+                    e.color
+                );
             })
         }
     }
