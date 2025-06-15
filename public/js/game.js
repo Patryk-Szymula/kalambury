@@ -174,6 +174,9 @@ class Game {
         document.getElementById('endGameScreen').classList.remove('d-none');
         document.getElementById("winner").innerText = data.players[0].name;
         this.renderResults(data.players);
+
+        // Clear chatbox
+        document.getElementById("messagesBox").innerHTML = "";
     }
 
     // Leader Board
